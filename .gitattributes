@@ -1,0 +1,14 @@
+* text=auto eol=lf
+*.bat text eol=crlf
+*.jar binary
+*.so binary
+*.png binary
+*.ttf binary
+*.nes binary
+*.sfc binary
+*.smc binary
+*.gb binary
+*.gbc binary
+*.gba binary
+*.gen binary
+*.md text eol=lf

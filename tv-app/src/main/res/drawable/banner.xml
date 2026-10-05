@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Banner 320x180 para el launcher de Android TV. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+    <path android:fillColor="#14121F" android:pathData="M0,0h320v180h-320z" />
+    <!-- D-pad -->
+    <path android:fillColor="#F2EFE6" android:pathData="M58,62h20v20h20v20h-20v20h-20v-20h-20v-20h20z" />
+    <!-- Botones A / B -->
+    <path android:fillColor="#E8524A" android:pathData="M232,80m-15,0a15,15 0,1 1,30 0a15,15 0,1 1,-30 0" />
+    <path android:fillColor="#F2B53A" android:pathData="M262,104m-15,0a15,15 0,1 1,30 0a15,15 0,1 1,-30 0" />
+    <!-- Barra -->
+    <path android:fillColor="#5B4FD9" android:pathData="M120,138h80v8h-80z" />
+</vector>

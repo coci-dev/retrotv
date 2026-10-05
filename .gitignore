@@ -1,0 +1,18 @@
+*.iml
+.gradle
+.kotlin
+/local.properties
+/.idea
+.DS_Store
+build/
+/captures
+.externalNativeBuild
+.cxx
+node_modules/
+tools/mock-uploads/
+.playwright-mcp/
+
+# Firma de release: NUNCA subir la clave ni sus contraseñas.
+keystore.properties
+*.jks
+*.keystore

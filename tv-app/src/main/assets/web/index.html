@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1b1922">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <title>Control</title>
+  <link rel="icon" href="data:,">
+  <link rel="preload" href="fonts/PressStart2P-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="controller.css">
+</head>
+<body>
+  <main id="pad" aria-label="Control de juego">
+    <!-- Hombros -->
+    <div class="btn shoulder" id="btn-L" data-btn="L">L</div>
+    <div class="btn shoulder" id="btn-R" data-btn="R">R</div>
+
+    <!-- Barra de estado -->
+    <header id="status">
+      <span id="conn" class="conn" data-state="connecting"><i class="dot"></i><span id="conn-text">Conectando…</span></span>
+      <span id="player" class="player" hidden>J1</span>
+      <span id="ping" class="ping">— ms</span>
+    </header>
+
+    <!-- Logo decorativo -->
+    <div class="logo" aria-hidden="true">
+      <span class="logo-dots"><i></i><i></i><i></i><i></i></span>
+      <span class="logo-text">RETRO&#8202;TV</span>
+    </div>
+
+    <!-- Cruceta: un solo elemento, la dirección se calcula por posición -->
+    <div id="dpad" class="dpad">
+      <div class="cross">
+        <div class="arm up"></div>
+        <div class="arm down"></div>
+        <div class="arm left"></div>
+        <div class="arm right"></div>
+        <div class="hub"></div>
+      </div>
+    </div>
+
+    <!-- Centro -->
+    <div id="center">
+      <div class="sys-row">
+        <div class="btn sys" id="btn-SELECT" data-btn="SELECT">SELECT</div>
+        <div class="btn sys" id="btn-START" data-btn="START">START</div>
+      </div>
+      <div class="util-row">
+        <button type="button" class="util" id="menu" data-action="menu" aria-label="Menú">
+          <svg class="ico" viewBox="0 0 7 7" aria-hidden="true"><path d="M0 1h7v1H0zM0 3h7v1H0zM0 5h7v1H0z"/></svg>MENU
+        </button>
+        <button type="button" class="util" id="add-game" data-action="upload" aria-label="Agregar juego">
+          <span id="add-game-label">+ JUEGO</span>
+        </button>
+        <button type="button" class="util" id="fs" data-action="fullscreen" aria-label="Pantalla completa">
+          <svg class="ico" viewBox="0 0 7 7" aria-hidden="true"><path d="M0 0h3v1H1v2H0zM4 0h3v3H6V1H4zM0 4h1v2h2v1H0zM6 4h1v3H4V6h2z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Botones de acción (diamante estilo Super Famicom) -->
+    <div id="face" class="face">
+      <div class="btn fb x" id="btn-X" data-btn="X">X</div>
+      <div class="btn fb a" id="btn-A" data-btn="A">A</div>
+      <div class="btn fb b" id="btn-B" data-btn="B">B</div>
+      <div class="btn fb y" id="btn-Y" data-btn="Y">Y</div>
+    </div>
+  </main>
+
+  <!-- Vertical: pedir girar -->
+  <section id="rotate" class="overlay rotate">
+    <div class="card">
+      <div class="phone-icon" aria-hidden="true"></div>
+      <h1>GIRA EL CELULAR</h1>
+      <p>El control funciona en horizontal.</p>
+      <button type="button" class="big" data-action="fullscreen">PANTALLA COMPLETA</button>
+    </div>
+  </section>
+
+  <!-- Partida llena -->
+  <section id="full" class="overlay" hidden>
+    <div class="card">
+      <h1>PARTIDA LLENA</h1>
+      <p>Todos los puestos de jugador están ocupados. Espera a que alguien salga y vuelve a intentarlo.</p>
+      <button type="button" class="big" data-action="retry">REINTENTAR</button>
+    </div>
+  </section>
+
+  <!-- Agregar juego (subida de ROMs) -->
+  <section id="upload" class="overlay upload" hidden role="dialog" aria-modal="true" aria-label="Juegos">
+    <div class="card up-card">
+      <div class="up-head">
+        <div class="tabs" role="tablist" aria-label="Juegos">
+          <button type="button" class="tab" role="tab" id="tab-add" data-tab="add" aria-controls="panel-add" aria-selected="true">AGREGAR</button>
+          <button type="button" class="tab" role="tab" id="tab-games" data-tab="games" aria-controls="panel-games" aria-selected="false" tabindex="-1">MIS JUEGOS<span class="tab-count" id="games-count"></span></button>
+        </div>
+        <button type="button" class="up-close" id="up-close" aria-label="Cerrar">&#x2715;</button>
+      </div>
+      <!-- Mis juegos (GET /api/games, POST /api/delete) -->
+      <div class="games-body" id="panel-games" role="tabpanel" aria-labelledby="tab-games" hidden>
+        <div class="games-bar">
+          <span class="games-info" id="games-info" aria-live="polite"></span>
+          <button type="button" class="mini" id="games-reload" aria-label="Actualizar lista">
+            <svg class="ico" viewBox="0 0 7 7" aria-hidden="true"><path d="M2 0h3v1H2zM6 0h1v3H4V2h1V1h1zM1 1h1v1H1zM0 2h1v3H0zM1 5h1v1H1zM2 6h3v1H2zM5 5h1v1H5zM6 4h1v1H6z"/></svg>ACTUALIZAR
+          </button>
+        </div>
+        <ul id="games-list" class="games-list scroll" data-state="idle"></ul>
+      </div>
+      <div class="up-body" id="panel-add" role="tabpanel" aria-labelledby="tab-add">
+        <div class="up-pick">
+          <input type="file" id="up-input" class="up-input" multiple>
+          <label for="up-input" class="big up-label" id="up-label">ELEGIR ARCHIVO</label>
+          <p class="up-hint">Formatos: <span id="up-exts"></span><br>Máx. 64 MB por archivo</p>
+        </div>
+        <ul id="up-list" class="up-list scroll" aria-live="polite"></ul>
+      </div>
+      <button type="button" class="big up-back" id="up-back">&#9664; VOLVER AL CONTROL</button>
+    </div>
+  </section>
+
+  <script src="controller.js"></script>
+</body>
+</html>
